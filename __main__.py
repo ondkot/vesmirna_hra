@@ -15,8 +15,13 @@ window = pyglet.window.Window()
 class globalni():
 	def __init__(self):
 		self.promena = ""
-class GameOver(ValueError):
-	pass
+class GameOver:
+	def __init__(self):
+		self.sprite = pyglet.sprite.Sprite(pyglet.image.load("images\\gameover.png"))
+	def tick(self,dt):
+		pass
+	def draw(self):
+		self.sprite.draw()
 class Spaceship:
 	def __init__(self):
 		self.laser = 0.9
@@ -155,6 +160,9 @@ def call_tick(dt):
 	if lives.promena >= 0:
 		for i in objects:
 			i.tick(dt)
+	else:
+		window.clear()
+		GameOver().draw()
 def clash(asteroid_x,asteroid_y,spaceship_x,spaceship_y,asteroid_radius,spaceship_radius):
 	if asteroid_x > spaceship_x:
 		x = asteroid_x - spaceship_x
@@ -183,18 +191,22 @@ def on_draw():
 	window.clear()
 	for i in objects:
 		i.sprite.draw()
-	if lives.promena >= 0 and lives.promena <= 9:
-		numbers[lives.promena].draw()
-	x = pyglet.sprite.Sprite(pyglet.image.load("images\\PNG\\UI\\numeralX.png"))
-	life = pyglet.sprite.Sprite(pyglet.image.load("images\\PNG\\UI\\playerLife1_blue.png"))
-	x.y = 425
-	life.y = 420
-	x.x = 50
-	life.x = 100
-	x.scale = 2
-	life.scale = 2
-	x.draw()
-	life.draw()
+	if lives.promena >= 0:
+		if lives.promena <= 9:
+			numbers[lives.promena].draw()
+		x = pyglet.sprite.Sprite(pyglet.image.load("images\\PNG\\UI\\numeralX.png"))
+		life = pyglet.sprite.Sprite(pyglet.image.load("images\\PNG\\UI\\playerLife1_blue.png"))
+		x.y = 425
+		life.y = 420
+		x.x = 50
+		life.x = 100
+		x.scale = 2
+		life.scale = 2
+		x.draw()
+		life.draw()
+	else:
+		GameOver().draw()
+
 
 @window.event
 def on_key_press(key_code,modifier):
